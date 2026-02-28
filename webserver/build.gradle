@@ -9,7 +9,6 @@ android {
 
     defaultConfig {
         minSdk 26
-        targetSdk 33
     }
 
     buildFeatures {
@@ -24,6 +23,12 @@ android {
 
     sonarqube {
         skipProject = true
+    }
+    lint {
+        targetSdk 33
+    }
+    testOptions {
+        targetSdk 33
     }
 }
 

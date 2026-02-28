@@ -1,15 +1,18 @@
 buildscript {
     repositories {
         google()
+        mavenCentral()
     }
 
     dependencies {
         classpath libs.gradle
+        classpath libs.kotlin.gradle.plugin
     }
 }
 
 plugins {
     id 'org.sonarqube' version '7.2.2.6593'
+    alias(libs.plugins.kotlin.compose) apply false
 }
 
 allprojects {

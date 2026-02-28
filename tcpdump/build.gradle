@@ -15,7 +15,6 @@ android {
 
     defaultConfig {
         minSdkVersion 26
-        targetSdk 33
     }
 
     externalNativeBuild {
@@ -26,6 +25,12 @@ android {
 
     sonarqube {
         skipProject = true
+    }
+    lint {
+        targetSdk 33
+    }
+    testOptions {
+        targetSdk 33
     }
 }
 

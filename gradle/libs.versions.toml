@@ -2,10 +2,13 @@
 # Build
 appName = "6.1.4"
 appCode = "60104" # Read x.yy.zz to match version name
-gradle = "8.7.2"
+cardview = "1.0.0"
+fragmentKtx = "1.8.9"
+gradle = "9.0.1"
 # Common
 guava = "32.0.1-android"
 junitVersion = "1.2.1"
+kotlinGradlePlugin = "2.2.10"
 okhttp = "4.12.0"
 timber = "5.0.1"
 # Root
@@ -21,12 +24,16 @@ junit = "4.13.2"
 json = "20220320"
 androidxTestCore = "1.6.1"
 androidXCoreTesting = "2.2.0"
+kotlin = "2.2.10"
 
 [libraries]
 # Build
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 # Common
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePlugin" }
 okhttp3-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 # Root
@@ -51,4 +58,5 @@ pcap4j = ["pcap4j-core", "pcap4j-pcap4j-packetfactory-static"]
 androidx-test = ["androidx-test-core", "androidx-test-core-testing", "androidx-test-ext-junit", "androidx-test-runner"]
 
 [plugins]
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
