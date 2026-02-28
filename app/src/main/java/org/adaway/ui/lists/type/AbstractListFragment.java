@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
@@ -62,12 +63,20 @@ public abstract class AbstractListFragment extends Fragment implements ListsView
         // Store activity
         this.mActivity = requireActivity();
         // Create fragment view
-        View view = inflater.inflate(R.layout.hosts_lists_fragment, container, false);
+        CoordinatorLayout view = new CoordinatorLayout(this.mActivity);
+        view.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        ));
         /*
          * Configure recycler view.
          */
-        // Store recycler view
-        RecyclerView recyclerView = view.findViewById(R.id.hosts_lists_list);
+        // Create recycler view
+        RecyclerView recyclerView = new RecyclerView(this.mActivity);
+        recyclerView.setLayoutParams(new CoordinatorLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        ));
         recyclerView.setHasFixedSize(true);
         // Defile recycler layout
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.mActivity);
@@ -75,6 +84,7 @@ public abstract class AbstractListFragment extends Fragment implements ListsView
         // Create recycler adapter
         ListsAdapter adapter = new ListsAdapter(this, isTwoRowsItem());
         recyclerView.setAdapter(adapter);
+        view.addView(recyclerView);
         /*
          * Create action mode.
          */

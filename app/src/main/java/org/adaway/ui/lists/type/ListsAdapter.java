@@ -1,9 +1,13 @@
 package org.adaway.ui.lists.type;
 
-import android.view.LayoutInflater;
+import android.content.Context;
+import android.text.TextUtils;
+import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,7 +15,6 @@ import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.adaway.R;
 import org.adaway.db.entity.HostListItem;
 import org.adaway.ui.lists.ListsViewCallback;
 
@@ -66,13 +69,67 @@ class ListsAdapter extends PagingDataAdapter<HostListItem, ListsAdapter.ViewHold
     @NonNull
     @Override
     public ListsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(
-                this.twoRows ? R.layout.checkbox_list_two_entries : R.layout.checkbox_list_entry,
-                parent,
-                false
+        Context context = parent.getContext();
+
+        LinearLayout rowLayout = new LinearLayout(context);
+        rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+        rowLayout.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        rowLayout.setLayoutParams(
+                new RecyclerView.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                )
         );
-        return new ViewHolder(view);
+        rowLayout.setMinimumHeight(dp(context, this.twoRows ? 72 : 48));
+
+        CheckBox enabledCheckBox = new CheckBox(context);
+        enabledCheckBox.setFocusable(false);
+        LinearLayout.LayoutParams checkBoxParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        checkBoxParams.leftMargin = dp(context, 12);
+        checkBoxParams.rightMargin = dp(context, 8);
+        rowLayout.addView(enabledCheckBox, checkBoxParams);
+
+        LinearLayout textColumn = new LinearLayout(context);
+        textColumn.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams textColumnParams = new LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+        );
+        textColumnParams.rightMargin = dp(context, 16);
+        rowLayout.addView(textColumn, textColumnParams);
+
+        TextView hostTextView = new TextView(context);
+        hostTextView.setSingleLine(true);
+        hostTextView.setEllipsize(TextUtils.TruncateAt.END);
+        hostTextView.setTypeface(hostTextView.getTypeface(), Typeface.BOLD);
+        hostTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f);
+        LinearLayout.LayoutParams hostParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        hostParams.topMargin = dp(context, this.twoRows ? 12 : 0);
+        hostParams.bottomMargin = dp(context, this.twoRows ? 0 : 12);
+        textColumn.addView(hostTextView, hostParams);
+
+        TextView redirectionTextView = null;
+        if (this.twoRows) {
+            redirectionTextView = new TextView(context);
+            redirectionTextView.setSingleLine(true);
+            redirectionTextView.setEllipsize(TextUtils.TruncateAt.END);
+            redirectionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f);
+            LinearLayout.LayoutParams subTextParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            subTextParams.bottomMargin = dp(context, 12);
+            textColumn.addView(redirectionTextView, subTextParams);
+        }
+
+        return new ViewHolder(rowLayout, enabledCheckBox, hostTextView, redirectionTextView);
     }
 
     @Override
@@ -110,11 +167,16 @@ class ListsAdapter extends PagingDataAdapter<HostListItem, ListsAdapter.ViewHold
          *
          * @param itemView The hosts sources view.
          */
-        ViewHolder(View itemView) {
+        ViewHolder(
+                View itemView,
+                CheckBox enabledCheckBox,
+                TextView hostTextView,
+                TextView redirectionTextView
+        ) {
             super(itemView);
-            this.enabledCheckBox = itemView.findViewById(R.id.checkbox_list_checkbox);
-            this.hostTextView = itemView.findViewById(R.id.checkbox_list_text);
-            this.redirectionTextView = itemView.findViewById(R.id.checkbox_list_subtext);
+            this.enabledCheckBox = enabledCheckBox;
+            this.hostTextView = hostTextView;
+            this.redirectionTextView = redirectionTextView;
         }
 
         void clear() {
@@ -127,5 +189,15 @@ class ListsAdapter extends PagingDataAdapter<HostListItem, ListsAdapter.ViewHold
             }
             this.itemView.setOnLongClickListener(null);
         }
+    }
+
+    private static int dp(Context context, int value) {
+        return Math.round(
+                TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        value,
+                        context.getResources().getDisplayMetrics()
+                )
+        );
     }
 }

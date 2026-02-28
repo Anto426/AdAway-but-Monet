@@ -21,9 +21,11 @@
 package org.adaway.ui.lists.type;
 
 import android.text.Editable;
-import android.view.LayoutInflater;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
@@ -55,16 +57,14 @@ public class RedirectedHostsFragment extends AbstractListFragment {
 
     @Override
     public void addItem() {
-        // Create dialog view
-        LayoutInflater factory = LayoutInflater.from(this.mActivity);
-        View view = factory.inflate(R.layout.lists_redirected_dialog, null);
-        EditText hostnameEditText = view.findViewById(R.id.list_dialog_hostname);
-        EditText ipEditText = view.findViewById(R.id.list_dialog_ip);
+        RedirectDialogView dialogView = createDialogView();
+        EditText hostnameEditText = dialogView.hostnameEditText;
+        EditText ipEditText = dialogView.ipEditText;
         // Create dialog
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this.mActivity)
                 .setCancelable(true)
                 .setTitle(R.string.list_add_dialog_redirect)
-                .setView(view)
+                .setView(dialogView.root)
                 // Setup buttons
                 .setPositiveButton(
                         R.string.button_add,
@@ -103,12 +103,10 @@ public class RedirectedHostsFragment extends AbstractListFragment {
 
     @Override
     protected void editItem(HostListItem item) {
-        // Create dialog view
-        LayoutInflater factory = LayoutInflater.from(this.mActivity);
-        View view = factory.inflate(R.layout.lists_redirected_dialog, null);
+        RedirectDialogView dialogView = createDialogView();
+        EditText hostnameEditText = dialogView.hostnameEditText;
+        EditText ipEditText = dialogView.ipEditText;
         // Set hostname and IP
-        EditText hostnameEditText = view.findViewById(R.id.list_dialog_hostname);
-        EditText ipEditText = view.findViewById(R.id.list_dialog_ip);
         hostnameEditText.setText(item.getHost());
         ipEditText.setText(item.getRedirection());
         // Move cursor to end of EditText
@@ -118,7 +116,7 @@ public class RedirectedHostsFragment extends AbstractListFragment {
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this.mActivity)
                 .setCancelable(true)
                 .setTitle(getString(R.string.list_edit_dialog_redirect))
-                .setView(view)
+                .setView(dialogView.root)
                 // Set buttons
                 .setPositiveButton(R.string.button_save,
                         (dialog, which) -> {
@@ -152,5 +150,50 @@ public class RedirectedHostsFragment extends AbstractListFragment {
         );
         hostnameEditText.addTextChangedListener(validator);
         ipEditText.addTextChangedListener(validator);
+    }
+
+    private RedirectDialogView createDialogView() {
+        int padding = getResources().getDimensionPixelSize(R.dimen.dialog_inner_padding);
+        LinearLayout layout = new LinearLayout(this.mActivity);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(padding, padding, padding, padding);
+
+        TextView hostnameTitle = new TextView(this.mActivity);
+        hostnameTitle.setText(R.string.list_dialog_hostname);
+        hostnameTitle.setTextAppearance(android.R.style.TextAppearance_Medium);
+        layout.addView(hostnameTitle);
+
+        EditText hostnameEditText = new EditText(this.mActivity);
+        hostnameEditText.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
+        hostnameEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        hostnameEditText.setHorizontallyScrolling(true);
+        hostnameEditText.setSingleLine(true);
+        layout.addView(hostnameEditText);
+
+        TextView ipTitle = new TextView(this.mActivity);
+        ipTitle.setText(R.string.list_dialog_ip);
+        ipTitle.setTextAppearance(android.R.style.TextAppearance_Medium);
+        layout.addView(ipTitle);
+
+        EditText ipEditText = new EditText(this.mActivity);
+        ipEditText.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
+        ipEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        ipEditText.setHorizontallyScrolling(true);
+        ipEditText.setSingleLine(true);
+        layout.addView(ipEditText);
+
+        return new RedirectDialogView(layout, hostnameEditText, ipEditText);
+    }
+
+    private static class RedirectDialogView {
+        final View root;
+        final EditText hostnameEditText;
+        final EditText ipEditText;
+
+        RedirectDialogView(View root, EditText hostnameEditText, EditText ipEditText) {
+            this.root = root;
+            this.hostnameEditText = hostnameEditText;
+            this.ipEditText = ipEditText;
+        }
     }
 }

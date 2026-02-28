@@ -22,9 +22,11 @@ package org.adaway.ui.lists.type;
 
 
 import android.text.Editable;
-import android.view.LayoutInflater;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
@@ -52,15 +54,13 @@ public class BlockedHostsFragment extends AbstractListFragment {
 
     @Override
     public void addItem() {
-        // Create dialog view
-        LayoutInflater factory = LayoutInflater.from(this.mActivity);
-        View view = factory.inflate(R.layout.lists_blocked_dialog, null);
-        EditText inputEditText = view.findViewById(R.id.list_dialog_hostname);
+        HostnameDialogView dialogView = createDialogView();
+        EditText inputEditText = dialogView.inputEditText;
         // Create dialog
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this.mActivity)
                 .setCancelable(true)
                 .setTitle(R.string.list_add_dialog_black)
-                .setView(view)
+                .setView(dialogView.root)
                 // Setup buttons
                 .setPositiveButton(
                         R.string.button_add,
@@ -89,11 +89,9 @@ public class BlockedHostsFragment extends AbstractListFragment {
 
     @Override
     protected void editItem(HostListItem item) {
-        // Create dialog view
-        LayoutInflater factory = LayoutInflater.from(this.mActivity);
-        View view = factory.inflate(R.layout.lists_blocked_dialog, null);
+        HostnameDialogView dialogView = createDialogView();
+        EditText inputEditText = dialogView.inputEditText;
         // Set hostname
-        EditText inputEditText = view.findViewById(R.id.list_dialog_hostname);
         inputEditText.setText(item.getHost());
         // Move cursor to end of EditText
         Editable inputEditContent = inputEditText.getText();
@@ -102,7 +100,7 @@ public class BlockedHostsFragment extends AbstractListFragment {
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this.mActivity)
                 .setCancelable(true)
                 .setTitle(R.string.list_edit_dialog_black)
-                .setView(view)
+                .setView(dialogView.root)
                 // Setup buttons
                 .setPositiveButton(
                         R.string.button_save,
@@ -127,5 +125,36 @@ public class BlockedHostsFragment extends AbstractListFragment {
         inputEditText.addTextChangedListener(
                 new AlertDialogValidator(alertDialog, RegexUtils::isValidHostname, true)
         );
+    }
+
+    private HostnameDialogView createDialogView() {
+        int padding = getResources().getDimensionPixelSize(R.dimen.dialog_inner_padding);
+        LinearLayout layout = new LinearLayout(this.mActivity);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(padding, padding, padding, padding);
+
+        TextView title = new TextView(this.mActivity);
+        title.setText(R.string.list_dialog_hostname);
+        title.setTextAppearance(android.R.style.TextAppearance_Medium);
+        layout.addView(title);
+
+        EditText inputEditText = new EditText(this.mActivity);
+        inputEditText.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
+        inputEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        inputEditText.setHorizontallyScrolling(true);
+        inputEditText.setSingleLine(true);
+        layout.addView(inputEditText);
+
+        return new HostnameDialogView(layout, inputEditText);
+    }
+
+    private static class HostnameDialogView {
+        final View root;
+        final EditText inputEditText;
+
+        HostnameDialogView(View root, EditText inputEditText) {
+            this.root = root;
+            this.inputEditText = inputEditText;
+        }
     }
 }
