@@ -64,7 +64,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.delay
@@ -92,7 +92,7 @@ private data class MethodEntry(
 )
 
 @Composable
-internal fun WelcomeMethodStep(onCanProceedChange: (Boolean) -> Unit) {
+fun WelcomeMethodStep(onCanProceedChange: (Boolean) -> Unit) {
     val context = LocalContext.current
     var selectedMethod by rememberSaveable { mutableStateOf(SetupMethod.NONE) }
 
@@ -242,14 +242,11 @@ internal fun WelcomeMethodStep(onCanProceedChange: (Boolean) -> Unit) {
 }
 
 @Composable
-internal fun WelcomeSyncStep(
-    onCanProceedChange: (Boolean) -> Unit
+fun WelcomeSyncStep(
+    onCanProceedChange: (Boolean) -> Unit,
+    homeViewModel: HomeViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val activity = context as WelcomeActivity
-    val homeViewModel = remember(activity) {
-        ViewModelProvider(activity)[HomeViewModel::class.java]
-    }
 
     var headerTextRes by rememberSaveable { mutableIntStateOf(R.string.welcome_sync_header) }
     var showProgress by rememberSaveable { mutableStateOf(true) }
@@ -436,7 +433,7 @@ internal fun WelcomeSyncStep(
 }
 
 @Composable
-internal fun WelcomeSupportStep(onCanProceedChange: (Boolean) -> Unit) {
+fun WelcomeSupportStep(onCanProceedChange: (Boolean) -> Unit) {
     val context = LocalContext.current
     val application = context.applicationContext as? Application
     val showSponsorship = remember { SentryLog.isStub() }
