@@ -9,7 +9,7 @@ android {
         }
     }
 
-    compileSdk 33
+    compileSdk 36
     ndkVersion = '27.2.12479018'
     namespace = 'org.adaway.libpcap'
 

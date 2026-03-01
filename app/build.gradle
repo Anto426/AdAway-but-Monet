@@ -20,8 +20,8 @@ android {
     namespace = 'org.adaway'
 
     defaultConfig {
-        minSdk 32
-        targetSdk 35
+        minSdk 26
+        targetSdk 36
         versionCode libs.versions.appCode.get() as int
         versionName libs.versions.appName.get()
 
@@ -114,7 +114,7 @@ dependencies {
     implementation libs.androidx.paging.compose
     implementation libs.androidx.preference
     implementation libs.androidx.recyclerview
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+    implementation libs.androidx.localbroadcastmanager
     implementation libs.androidx.room.runtime
     implementation libs.androidx.room.paging
     implementation libs.androidx.material3
@@ -122,7 +122,7 @@ dependencies {
     annotationProcessor libs.androidx.room.compiler
     implementation libs.androidx.work.runtime
     implementation libs.material
-    implementation libs.androidx.compose.bom
+    implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.activity.compose
     implementation libs.androidx.compose.ui
     implementation libs.androidx.compose.ui.tooling.preview
