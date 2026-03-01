@@ -1,26 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_main_title">Настройки</string>
+    <string name="pref_main_title">ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸</string>
     <!-- General category -->
-    <string name="pref_general_category">Главные</string>
-    <string name="pref_dark_theme">Выбрать тему</string>
+    <string name="pref_general_category">Ð“Ð»Ð°Ð²Ð½Ñ‹Ðµ</string>
+    <string name="pref_dark_theme">Ð’Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ñ‚ÐµÐ¼Ñƒ</string>
+    <string name="pref_dynamic_colors">Используйте динамические цвета (Моне)</string>
+    <string name="pref_dynamic_colors_summary">Используйте цвета Material You на основе обоев на Android 12+</string>
+    <string name="pref_dynamic_colors_unsupported_summary">Не поддерживается в этой версии Android</string>
     <string-array name="pref_dark_theme_modes">
-        <item>Светлая</item>
-        <item>Темная</item>
-        <item>На основе системной</item>
+        <item>Ð¡Ð²ÐµÑ‚Ð»Ð°Ñ</item>
+        <item>Ð¢ÐµÐ¼Ð½Ð°Ñ</item>
+        <item>ÐÐ° Ð¾ÑÐ½Ð¾Ð²Ðµ ÑÐ¸ÑÑ‚ÐµÐ¼Ð½Ð¾Ð¹</item>
     </string-array>
-    <string name="pref_update_configuration">Автоматические обновления</string>
+    <string name="pref_update_configuration">ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ðµ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ</string>
     <!-- Ad block category -->
-    <string name="pref_ad_block_category">Блокировка рекламы</string>
-    <string name="pref_root_ad_blocker_configuration">Блокировщик рекламы на основе root</string>
-    <string name="pref_vpn_ad_blocker_configuration">Блокировщик рекламы на основе VPN</string>
-    <string name="pref_enable_ipv6">Включить поддержку IPv6</string>
-    <string name="pref_backup_restore">Резервная копия / восстановление правил блокировки</string>
+    <string name="pref_ad_block_category">Ð‘Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²ÐºÐ° Ñ€ÐµÐºÐ»Ð°Ð¼Ñ‹</string>
+    <string name="pref_root_ad_blocker_configuration">Ð‘Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ñ‰Ð¸Ðº Ñ€ÐµÐºÐ»Ð°Ð¼Ñ‹ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ root</string>
+    <string name="pref_vpn_ad_blocker_configuration">Ð‘Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ñ‰Ð¸Ðº Ñ€ÐµÐºÐ»Ð°Ð¼Ñ‹ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ VPN</string>
+    <string name="pref_enable_ipv6">Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÑƒ IPv6</string>
+    <string name="pref_backup_restore">Ð ÐµÐ·ÐµÑ€Ð²Ð½Ð°Ñ ÐºÐ¾Ð¿Ð¸Ñ / Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð°Ð²Ð¸Ð» Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²ÐºÐ¸</string>
     <!-- Debug category -->
-    <string name="pref_debug_category">Режим отладки</string>
-    <string name="pref_enable_telemetry">Отправлять отчёты об ошибках</string>
-    <string name="pref_enable_telemetry_summary">Отправлять в Sentry (sentry.io)</string>
-    <string name="pref_enable_telemetry_disabled_summary">Не поддерживается в этой сборке</string>
-    <string name="pref_enable_debug">Подробный журнал отладки</string>
-    <string name="pref_enable_debug_summary">Для применения требуется перезапуск приложения</string>
+    <string name="pref_debug_category">Ð ÐµÐ¶Ð¸Ð¼ Ð¾Ñ‚Ð»Ð°Ð´ÐºÐ¸</string>
+    <string name="pref_enable_telemetry">ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒ Ð¾Ñ‚Ñ‡Ñ‘Ñ‚Ñ‹ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐ°Ñ…</string>
+    <string name="pref_enable_telemetry_summary">ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒ Ð² Sentry (sentry.io)</string>
+    <string name="pref_enable_telemetry_disabled_summary">ÐÐµ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÑ‚ÑÑ Ð² ÑÑ‚Ð¾Ð¹ ÑÐ±Ð¾Ñ€ÐºÐµ</string>
+    <string name="pref_enable_debug">ÐŸÐ¾Ð´Ñ€Ð¾Ð±Ð½Ñ‹Ð¹ Ð¶ÑƒÑ€Ð½Ð°Ð» Ð¾Ñ‚Ð»Ð°Ð´ÐºÐ¸</string>
+    <string name="pref_enable_debug_summary">Ð”Ð»Ñ Ð¿Ñ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ Ð¿ÐµÑ€ÐµÐ·Ð°Ð¿ÑƒÑÐº Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ</string>
 </resources>

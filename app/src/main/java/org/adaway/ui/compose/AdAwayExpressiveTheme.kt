@@ -18,9 +18,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -50,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.adaway.helper.PreferenceHelper
 
 private val AdAwayExpressiveLightColors = lightColorScheme(
     primary = Color(0xFFB71C1C),
@@ -160,9 +161,15 @@ fun AdAwayExpressiveTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = AdAwayExpressiveTypography,
-        shapes = AdAwayExpressiveShapes,
-        content = content
-    )
+        shapes = AdAwayExpressiveShapes
+    ) {
+        // Use a Surface to set the default content color (text color) for the app
+        Surface(
+            color = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            content = content
+        )
+    }
 }
 
 /**
@@ -171,17 +178,14 @@ fun AdAwayExpressiveTheme(
  */
 @Composable
 fun ExpressiveAppContainer(content: @Composable () -> Unit) {
-    AdAwayExpressiveTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
-            contentColor = MaterialTheme.colorScheme.onBackground
-        ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                ExpressiveBackground()
-                Box(modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)) {
-                    content()
-                }
+    val context = LocalContext.current
+    val dynamicColorEnabled = PreferenceHelper.getDynamicColorEnabled(context)
+
+    AdAwayExpressiveTheme(dynamicColor = dynamicColorEnabled) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            ExpressiveBackground()
+            Box(modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)) {
+                content()
             }
         }
     }

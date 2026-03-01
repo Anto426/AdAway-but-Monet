@@ -58,6 +58,8 @@ import org.adaway.util.log.SentryLog
 @Composable
 internal fun PrefsMainScreen(
     darkThemeMode: String,
+    dynamicColorEnabled: Boolean,
+    dynamicColorSupported: Boolean,
     enableIpv6: Boolean,
     enableTelemetry: Boolean,
     enableDebug: Boolean,
@@ -65,6 +67,7 @@ internal fun PrefsMainScreen(
     rootConfigEnabled: Boolean,
     vpnConfigEnabled: Boolean,
     onThemeSelected: (String) -> Unit,
+    onDynamicColorEnabledChanged: (Boolean) -> Unit,
     onOpenUpdate: () -> Unit,
     onOpenRootConfig: () -> Unit,
     onOpenVpnConfig: () -> Unit,
@@ -125,6 +128,21 @@ internal fun PrefsMainScreen(
                     titleRes = R.string.pref_dark_theme,
                     summary = selectedThemeLabel,
                     onClick = { showThemeDialog = true }
+                )
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp))
+                PreferenceToggleRow(
+                    iconRes = R.drawable.ic_brightness_medium_24dp,
+                    titleRes = R.string.pref_dynamic_colors,
+                    summary = stringResource(
+                        if (dynamicColorSupported) {
+                            R.string.pref_dynamic_colors_summary
+                        } else {
+                            R.string.pref_dynamic_colors_unsupported_summary
+                        }
+                    ),
+                    checked = dynamicColorEnabled && dynamicColorSupported,
+                    enabled = dynamicColorSupported,
+                    onCheckedChange = onDynamicColorEnabledChanged
                 )
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp))
                 PreferenceRow(

@@ -103,6 +103,7 @@ private fun PrefsMainRoute(
     val prefs = remember(context) { context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE) }
 
     var darkThemeMode by remember { mutableStateOf(context.getString(R.string.pref_dark_theme_mode_def)) }
+    var dynamicColorEnabled by remember { mutableStateOf(true) }
     var enableIpv6 by remember { mutableStateOf(false) }
     var enableTelemetry by remember { mutableStateOf(false) }
     var enableDebug by remember { mutableStateOf(false) }
@@ -114,6 +115,7 @@ private fun PrefsMainRoute(
             context.getString(R.string.pref_dark_theme_mode_key),
             context.getString(R.string.pref_dark_theme_mode_def)
         ) ?: context.getString(R.string.pref_dark_theme_mode_def)
+        dynamicColorEnabled = PreferenceHelper.getDynamicColorEnabled(context)
         enableIpv6 = PreferenceHelper.getEnableIpv6(context)
         enableTelemetry = PreferenceHelper.getTelemetryEnabled(context)
         enableDebug = PreferenceHelper.getDebugEnabled(context)
@@ -128,6 +130,8 @@ private fun PrefsMainRoute(
 
     PrefsMainScreen(
         darkThemeMode = darkThemeMode,
+        dynamicColorEnabled = dynamicColorEnabled,
+        dynamicColorSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
         enableIpv6 = enableIpv6,
         enableTelemetry = enableTelemetry,
         enableDebug = enableDebug,
@@ -138,6 +142,13 @@ private fun PrefsMainRoute(
             darkThemeMode = mode
             prefs.edit()
                 .putString(context.getString(R.string.pref_dark_theme_mode_key), mode)
+                .apply()
+            onRequestRecreate()
+        },
+        onDynamicColorEnabledChanged = { enabled ->
+            dynamicColorEnabled = enabled
+            prefs.edit()
+                .putBoolean(context.getString(R.string.pref_dynamic_color_key), enabled)
                 .apply()
             onRequestRecreate()
         },

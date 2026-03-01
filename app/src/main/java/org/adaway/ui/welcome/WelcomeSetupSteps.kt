@@ -146,13 +146,12 @@ fun WelcomeMethodStep(onCanProceedChange: (Boolean) -> Unit) {
     }
 
     ExpressivePage {
-        Icon(
-            painter = painterResource(R.drawable.ic_outline_rule_24),
+        Image(
+            painter = painterResource(R.drawable.logo),
             contentDescription = stringResource(R.string.app_name),
-            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .padding(top = 16.dp)
-                .size(96.dp)
+                .size(120.dp)
         )
 
         Text(
