@@ -1,5 +1,7 @@
 package org.adaway.ui.compose
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -37,6 +39,11 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -50,7 +57,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.adaway.helper.PreferenceHelper
+import org.adaway.R
+import org.adaway.util.Constants
 
 private val AdAwayExpressiveLightColors = lightColorScheme(
     primary = Color(0xFFB71C1C),
@@ -152,7 +160,11 @@ fun AdAwayExpressiveTheme(
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            try {
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            } catch (_: Throwable) {
+                if (darkTheme) AdAwayExpressiveDarkColors else AdAwayExpressiveLightColors
+            }
         }
         darkTheme -> AdAwayExpressiveDarkColors
         else -> AdAwayExpressiveLightColors
@@ -178,8 +190,7 @@ fun AdAwayExpressiveTheme(
  */
 @Composable
 fun ExpressiveAppContainer(content: @Composable () -> Unit) {
-    val context = LocalContext.current
-    val dynamicColorEnabled = PreferenceHelper.getDynamicColorEnabled(context)
+    val dynamicColorEnabled = rememberDynamicColorEnabled()
 
     AdAwayExpressiveTheme(dynamicColor = dynamicColorEnabled) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -189,6 +200,32 @@ fun ExpressiveAppContainer(content: @Composable () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+private fun rememberDynamicColorEnabled(): Boolean {
+    val context = LocalContext.current
+    val prefs = remember(context) {
+        context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE)
+    }
+    val key = remember(context) { context.getString(R.string.pref_dynamic_color_key) }
+    val defaultValue = remember(context) { context.resources.getBoolean(R.bool.pref_dynamic_color_def) }
+    var dynamicColorEnabled by remember(prefs, key, defaultValue) {
+        mutableStateOf(prefs.getBoolean(key, defaultValue))
+    }
+    DisposableEffect(prefs, key, defaultValue) {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, changedKey ->
+            if (changedKey == key) {
+                dynamicColorEnabled = sharedPreferences.getBoolean(key, defaultValue)
+            }
+        }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        dynamicColorEnabled = prefs.getBoolean(key, defaultValue)
+        onDispose {
+            prefs.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+    }
+    return dynamicColorEnabled
 }
 
 @Composable
